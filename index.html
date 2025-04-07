@@ -1,80 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mihir's Documents</title>
-    <link rel="stylesheet" href="./vector/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Projects</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #1f2937;
+    }
+    .folder, .document {
+      margin-left: 20px;
+      padding: 5px 10px;
+      border-left: 2px solid #9ca3af;
+      margin-top: 5px;
+    }
+    .folder {
+      font-weight: bold;
+    }
+    .document a {
+      text-decoration: none;
+      color: #2563eb;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Mihir's Documents</h1>
-    </header>
-    <div class="container">
-        <aside class="sidebar">
-            <ul>
-                <li><button onclick="showContent('folder1')">Health Prognosis</button></li>
-                <li><button onclick="showContent('folder2')">Social PiggyBacking</button></li>
-                <li><button onclick="showContent('folder3')">Car Price Prediction</button></li>
-                <li><button onclick="showContent('folder4')">Forest Fire Prediction</button></li>
-                <li><button onclick="showContent('folder5')">Mumbai Rent Guru</button></li>
-            </ul>
-        </aside>
-        <main class="content">
-            <div id="folder1" class="folder-content">
-                <h2>Health Prognosis</h2>
-                <h4><a href="https://drive.google.com/file/d/1mhxSgZT8TadTkMxaO2Rb7m8wn3kAX66a/view?usp=sharing" target="_blank">Video Link</a></h4>
-                <h4><a href="https://drive.google.com/file/d/1jMG3zUqy1cf8-HaudhOJkvCOK7xRW3wX/view?usp=sharing" target="_blank">Report Link</a></h4>
-                <video controls>
-                    <source src="./Videos/Health Prognosis.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <embed src="./Documents/Health Prognosis.pdf" type="application/pdf" width="100%" height="600px">
-            </div>
-            <div id="folder2" class="folder-content">
-                <h2>Social PiggyBacking</h2>
-                <h4><a href="https://drive.google.com/file/d/1mhxSgZT8TadTkMxaO2Rb7m8wn3kAX66a/view?usp=sharing" target="_blank">Video Link</a></h4>
-                <h4><a href="https://drive.google.com/file/d/1jMG3zUqy1cf8-HaudhOJkvCOK7xRW3wX/view?usp=sharing" target="_blank">Report Link</a></h4>
-                <video controls>
-                    <source src="./Videos/Social PiggyBacking.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <embed src="./Documents/Social PiggyBacking.pdf" type="application/pdf" width="100%" height="600px">
-            </div>
-            <div id="folder3" class="folder-content">
-                <h2>Car Price Prediction</h2>
-                <h4><a href="https://drive.google.com/file/d/1k9Ky42pJ9Hpze8zs0aOCT3Wbb96EssW0/view?usp=sharing" target="_blank">Video Link</a></h4>
-                <h4><a href="https://drive.google.com/file/d/1hwENojc-bP7ElQx6i5AbbMSHWRQmC4Mh/view?usp=sharing" target="_blank">Report Link</a></h4>
-                <video controls>
-                    <source src="./Videos/AutoML _ A Car price prediction Machine Learning Model.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <embed src="./Documents/Car Price Prediction Report PDF.pdf" type="application/pdf" width="100%" height="600px">
-            </div>
-            <div id="folder4" class="folder-content">
-                <h2>Forest Fire Prediction</h2>
-                <h4><a href="" target="_blank">Report Link</a></h4>
-                <embed src="./Documents/Forest Fire Prediction.pdf" type="application/pdf" width="100%" height="600px">
-            </div>
-            <div id="folder5" class="folder-content">
-                <h2>Mumbai Rent Guru</h2>
-                <h4><a href="https://drive.google.com/file/d/1oZYq2sg_baY7KrZPLQJ0blxSDYxpAEzn/view?usp=sharing" target="_blank">Video Link</a></h4>
-                <h4><a href="https://drive.google.com/file/d/1Ag7GXI5lPh4uahbZx35FXi9QKuBQE2-m/view?usp=sharing" target="_blank">Report Link</a></h4>
-                <video controls>
-                    <source src="./Videos/Mumbai Rent Guru.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <embed src="./Documents/Mumbai Rent Guru.pdf" type="application/pdf" width="100%" height="600px">
-            </div>
-        </main>
-    </div>
+  <h1>📁 My Projects</h1>
 
-    <script>
-        function showContent(folderId) {
-            const folders = document.querySelectorAll('.folder-content');
-            folders.forEach(folder => folder.style.display = 'none');
-            document.getElementById(folderId).style.display = 'block';
-        }
-    </script>
+  <div class="folder">Social Piggybacking (IIT Gandhinagar Hackathon)
+    <div class="document">📄 <a href="https://drive.google.com/file/d/10b30ewmeIAZs3LA9bnlWr-xrbIkLz2sr/view?usp=sharing" target="_blank">Report</a></div>
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1mhxSgZT8TadTkMxaO2Rb7m8wn3kAX66a/view?usp=sharing" target="_blank">Explanation Video</a></div>
+  </div>
+
+  <div class="folder">Health Prognosis
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1jMG3zUqy1cf8-HaudhOJkvCOK7xRW3wX/view?usp=sharing" target="_blank">Report</a></div>
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1ZIWpTNBoRdb3uZfs2281e3JAgH4i2NF3/view?usp=sharing" target="_blank">Video</a></div>
+  </div>
+
+  <div class="folder">Mumbai Rent Guru
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1Ag7GXI5lPh4uahbZx35FXi9QKuBQE2-m/view?usp=sharing" target="_blank">Report</a></div>
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1oZYq2sg_baY7KrZPLQJ0blxSDYxpAEzn/view?usp=sharing" target="_blank">Video</a></div>
+  </div>
+
+  <div class="folder">AutoML Prophet
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1hwENojc-bP7ElQx6i5AbbMSHWRQmC4Mh/view?usp=sharing" target="_blank">Report</a></div>
+    <div class="document">📄 <a href="https://drive.google.com/file/d/1k9Ky42pJ9Hpze8zs0aOCT3Wbb96EssW0/view?usp=sharing" target="_blank">Video</a></div>
+  </div>
+
+  <div class="folder">Lunar Crater Detection
+    <div class="document">📄 <a href="https://mihir2811.github.io/Crater_Detection/" target="_blank">Report Website</a></div>
+  </div>
+
+  <div class="folder">Road Accident Dashboard (Tableau)
+    <div class="document">📄 <a href="https://public.tableau.com/views/Accidents_16854417416330/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" target="_blank">View Dashboard</a></div>
+  </div>
+
+  <div class="folder">E-Sports Analysis Dashboard (Tableau)
+    <div class="document">📄 <a href="https://public.tableau.com/shared/QBX874JCK?:display_count=n&:origin=viz_share_link" target="_blank">View Dashboard</a></div>
+  </div>
+
+  <div class="folder">Amazon Sales Analysis Dashboard (Tableau)
+    <div class="document">📄 <a href="https://public.tableau.com/views/Self-MadeAmazon/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link" target="_blank">View Dashboard</a></div>
+  </div>
+
+  <div class="folder">Aerial/Drone Imagery Stone Detection
+    <div class="document">📄 <a href="#" target="_blank">Report</a></div>
+  </div>
+
+  <div class="folder">Construction Safety Gear Detection
+    <div class="document">📄 <a href="#" target="_blank">Report</a></div>
+  </div>
+
+  <div class="folder">Adaptive Image Tuner (Digital Image Enhancement Model)
+    <div class="document">📄 <a href="#" target="_blank">Report</a></div>
+  </div>
+
 </body>
 </html>
