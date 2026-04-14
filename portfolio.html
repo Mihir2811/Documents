@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mihir · Project Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: {} } }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Times New Roman everywhere ── */
+    body, h1, h2, h3, h4, p, td, th, li, a, span, button, div, input, label {
+      font-family: 'Times New Roman', Times, serif !important;
+    }
+
+    /* ── CSS variables for theming ── */
+    :root {
+      --bg: #ececec;
+      --paper: #ffffff;
+      --text: #1a1a1a;
+      --muted: #666;
+      --border: #c0c0c0;
+      --border-light: #ddd;
+    }
+    .dark {
+      --bg: #181818;
+      --paper: #242424;
+      --text: #e2e2e2;
+      --muted: #888;
+      --border: #3a3a3a;
+      --border-light: #2e2e2e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background .3s, color .3s;
+    }
+
+    /* ── Top nav ── */
+    #topnav {
+      position: fixed; top:0; left:0; right:0; z-index:50;
+      height: 52px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      transition: background .3s;
+    }
+    #topnav .brand { font-size:1rem; font-weight:bold; letter-spacing:.01em; }
+    #topnav .count { font-size:.78rem; color:var(--muted); }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      position: fixed; top:52px; left:0; bottom:0; z-index:40;
+      width: 228px;
+      background: var(--paper);
+      border-right: 1px solid var(--border);
+      padding: 18px 14px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      transition: transform .3s, background .3s;
+    }
+    #sidebar::-webkit-scrollbar { width: 4px; }
+    #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    @media (max-width:767px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+    }
+    @media (min-width:768px) {
+      #sidebar { transform: translateX(0) !important; }
+    }
+
+    .sidebar-cat-label {
+      font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); margin: 12px 0 3px; display: block;
+    }
+    .sidebar-link {
+      display: block; font-size: .8rem; padding: 3px 0;
+      color: var(--text); text-decoration: none;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-link:hover { text-decoration: underline; }
+    .sidebar-link.active { font-weight: bold; text-decoration: underline; }
+
+    /* ── Overlay (mobile) ── */
+    #sidebar-overlay {
+      display: none; position: fixed; inset:0; z-index:39;
+      background: rgba(0,0,0,.45);
+    }
+    #sidebar-overlay.open { display: block; }
+
+    /* ── Main layout ── */
+    #main { margin-left: 228px; }
+    @media (max-width:767px) { #main { margin-left: 0; } }
+
+    /* ── Each doc-page fills the viewport ── */
+    .doc-page {
+      min-height: 100vh;
+      padding-top: 52px;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── The white "paper" sheet ── */
+    .paper {
+      width: min(820px, 95%);
+      margin: 0 auto;
+      background: var(--paper);
+      padding: 50px 62px 44px;
+      flex: 1;
+      display: flex; flex-direction: column;
+      box-shadow: 0 1px 6px rgba(0,0,0,.1);
+      transition: background .3s;
+      min-height: calc(100vh - 52px);
+    }
+    @media (max-width:600px) { .paper { padding: 28px 18px 32px; } }
+    .dark .paper { box-shadow: 0 1px 10px rgba(0,0,0,.55); }
+
+    /* ── Word-style rules ── */
+    .rule-single { border:none; border-top:1px solid var(--border); }
+    .rule-double { border:none; border-top: 3px double var(--text); margin-bottom:4px; }
+
+    /* ── Tech tags ── */
+    .tag {
+      display: inline-block; border: 1px solid var(--muted);
+      padding: 1px 8px; font-size: .76rem; border-radius: 2px;
+      color: var(--muted);
+    }
+
+    /* ── Info table ── */
+    .info-table { width:100%; border-collapse:collapse; }
+    .info-table td { padding: 8px 0; vertical-align: top; }
+    .info-table td.label {
+      width:130px; font-weight:bold; padding-right:16px;
+      white-space:nowrap; font-size:.92rem;
+    }
+    .info-table td.val { font-size:.92rem; }
+    .info-table tr + tr td { border-top: 1px dotted var(--border-light); }
+    @media (max-width:460px) {
+      .info-table td, .info-table td.label { display:block; width:100%; }
+      .info-table td.label { padding-bottom:2px; border-top:none !important; }
+    }
+
+    /* ── TOC ── */
+    .toc-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+    .toc-table td { padding: 4px 2px; }
+    .toc-table tr { border-bottom: 1px dotted var(--border-light); }
+    .toc-cat { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding-top:14px !important; border-bottom: 1px solid var(--border) !important; }
+
+    /* ── Links ── */
+    a.doc-link { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+    a.doc-link:hover { opacity: .6; }
+
+    /* ── Page footer ── */
+    .page-footer {
+      font-size: .72rem; color: var(--muted);
+      border-top: 1px solid var(--border-light);
+      padding-top: 10px; margin-top: auto;
+    }
+
+    /* ── Dark toggle ── */
+    #toggle-btn {
+      width: 44px; height: 24px; border-radius: 99px;
+      border: 1px solid var(--border); background: var(--bg);
+      display: flex; align-items: center; padding: 2px;
+      cursor: pointer; position: relative; transition: background .3s;
+    }
+    #toggle-knob {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--paper); box-shadow: 0 1px 3px rgba(0,0,0,.25);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .3s; transform: translateX(0);
+    }
+    .dark #toggle-knob { transform: translateX(20px); }
+
+    /* ── Back-to-top ── */
+    #back-top {
+      position: fixed; bottom:20px; right:20px; z-index:50;
+      width:36px; height:36px; border-radius:3px;
+      background: var(--text); color: var(--paper); border:none;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; opacity:0; pointer-events:none;
+      transition: opacity .3s;
+    }
+    #back-top.show { opacity:1; pointer-events:auto; }
+
+    /* ── Scrollbar global ── */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+
+    /* ── big watermark number ── */
+    .wm-num {
+      font-size: clamp(4rem,12vw,7rem);
+      font-weight:bold; line-height:1;
+      opacity:.06; user-select:none;
+      flex-shrink:0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ TOP NAV ══ -->
+<nav id="topnav">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button id="hamburger" class="md:hidden" aria-label="menu"
+            style="background:none;border:none;cursor:pointer;padding:4px;">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <span class="brand">Mihir — Project Portfolio</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span class="count">22 Projects</span>
+    <button id="toggle-btn" onclick="toggleDark()" aria-label="Toggle dark mode">
+      <span id="toggle-knob">
+        <!-- sun -->
+        <svg class="dark-hidden" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:block;">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- moon -->
+        <svg class="light-hidden" width="11" height="11" fill="currentColor" viewBox="0 0 20 20" style="display:none;">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+</nav>
+
+<!-- mobile overlay -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- ══ SIDEBAR ══ -->
+<aside id="sidebar">
+  <span style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Contents</span>
+  <a href="#cover" class="sidebar-link" style="font-weight:bold;" data-id="cover">Cover Page</a>
+  <div id="sidebar-body"></div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main id="main">
+
+  <!-- COVER PAGE -->
+  <section id="cover" class="doc-page">
+    <div class="paper" style="justify-content:center;text-align:center;">
+      <div style="max-width:520px;margin:0 auto;width:100%;">
+        <div class="rule-double"></div>
+        <hr class="rule-single" style="margin-bottom:56px;">
+
+        <h1 style="font-size:clamp(2rem,5vw,3rem);font-weight:bold;line-height:1.15;margin-bottom:12px;">
+          Project Portfolio
+        </h1>
+        <p style="font-size:1rem;color:var(--muted);margin-bottom:52px;">Mihir &nbsp;·&nbsp; 2026</p>
+
+        <hr class="rule-single" style="margin-bottom:5px;">
+        <div class="rule-double" style="margin-bottom:44px;"></div>
+
+        <!-- TOC -->
+        <div style="text-align:left;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Table of Contents</p>
+          <table class="toc-table" id="toc-table"></table>
+        </div>
+
+        <p class="page-footer" style="margin-top:44px;text-align:center;">
+          Page 1 &nbsp;·&nbsp; Scroll or use the sidebar to navigate
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT PAGES -->
+  <div id="pages"></div>
+
+</main>
+
+<!-- back to top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+    <path d="M5 15l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ══ DATA + LOGIC ══ -->
+<script>
+const PROJECTS = [
+  { id:"gati-billing",    name:"Gati Billing",                       cat:"Web / Full-stack",   stack:["Django","Python","Invoicing"],                   url:"https://gati-billing.onrender.com/",                                      desc:"A full-stack invoice management system for freelancers and small businesses, featuring PDF generation, client management, and GST-ready reports." },
+  { id:"lakshyacv",       name:"LakshyaCV",                          cat:"Web / Full-stack",   stack:["Django","Tailwind CSS","AI"],                     url:"https://lakshyacv.onrender.com/",                                         desc:"An AI-powered resume builder with real-time preview, ATS scoring, and one-click PDF export. Built with Django and Tailwind CSS." },
+  { id:"vr-healthos",     name:"VR-HealthOS",                        cat:"Web / Full-stack",   stack:["Django","OPD Management","Healthcare"],           url:"https://vr-healthos.onrender.com/",                                       desc:"Out-of-the-box OPD management solution for hospitals — appointment scheduling, patient records, and billing consolidated in one dashboard." },
+  { id:"eat-hub",         name:"Eat-Hub",                            cat:"Web / Full-stack",   stack:["React","Node.js","MongoDB"],                      url:"https://eat-hub.example.com/",                                            desc:"Restaurant management platform with online ordering, live table booking, and real-time inventory tracking." },
+  { id:"gyan-yantra",     name:"Gyan Yantra",                        cat:"Web / Full-stack",   stack:["AI","Knowledge Base","Semantic Search"],          url:"https://gyan-yantra.example.com/",                                        desc:"Smart knowledge-base with AI-powered semantic search and recommendation engine — think internal Wiki meets a language model." },
+  { id:"monoalpha",       name:"Encryption — Monoalphabetic Cipher", cat:"Web / Full-stack",   stack:["JavaScript","HTML","CSS"],                        url:"https://mihir2811.github.io/Encryption-using-Monoalphabetic-Cipher/",     desc:"Browser-based tool to encrypt and decrypt text using a configurable single-alphabet substitution key." },
+  { id:"cpa-auto",        name:"CPA Automation",                     cat:"Web / Full-stack",   stack:["Python","Finance","Automation"],                  url:"https://github.com/user/cpa-automation",                                  desc:"Automates bookkeeping, audit-trail generation, and tax-report compilation for CA and CPA firms, reducing manual entry by over 80%." },
+  { id:"trustpdf",        name:"TrustPDF",                           cat:"AI / ML",            stack:["AI","NLP","Security"],                            url:"https://github.com/Mihir2811/TrustPDF",                                   desc:"Detects unauthorized edits and tampering in PDF documents using fingerprinting and NLP-based anomaly detection." },
+  { id:"rag-system",      name:"Multi-Modal RAG System",             cat:"AI / ML",            stack:["Gen-AI","RAG","LangChain","Python"],              url:"#",                                                                       desc:"Retrieval-augmented generation pipeline supporting PDFs, images, plain text, CSV files, and web pages as simultaneous knowledge sources." },
+  { id:"smart-chunk",     name:"Smart Chunk Processor",              cat:"AI / ML",            stack:["Python","LLMs","Vector DB"],                      url:"#",                                                                       desc:"Context-aware document chunking engine that preserves semantic boundaries, boosting vector-database retrieval accuracy significantly." },
+  { id:"lunar-crater",    name:"Lunar Crater Detection",             cat:"AI / ML",            stack:["YOLO","Deep Learning","Computer Vision"],         url:"https://github.com/Mihir2811/Lunar_Crater_Detection",                    desc:"YOLO-based automated crater detection system trained on satellite imagery from ISRO and NASA datasets." },
+  { id:"health-prog",     name:"Health Prognosis",                   cat:"AI / ML",            stack:["XGBoost","LightGBM","Random Forest","SHAP"],      url:"https://github.com/Mihir2811/Health-Prognosis",                          desc:"Cardiovascular disease risk prediction ensemble combining XGBoost, LightGBM, and Random Forest with SHAP explainability charts." },
+  { id:"mumbai-rent",     name:"Mumbai Rent Guru",                   cat:"AI / ML",            stack:["ML","Flask","Gradient Boosting"],                 url:"https://github.com/Mihir2811/Mumbai_Rent_Guru",                          desc:"Predicts rental prices across Mumbai micro-neighbourhoods using geospatial features and gradient-boosting regression." },
+  { id:"automl",          name:"AutoML Prophet",                     cat:"AI / ML",            stack:["AutoML","Prophet","Flask"],                       url:"https://github.com/Mihir2811/AutoML_Prophet",                            desc:"Used-car price prediction pipeline built with AutoML and Facebook Prophet for temporal trend modelling." },
+  { id:"social-piggy",    name:"Social-PiggyBacking",                cat:"AI / ML",            stack:["NLP","Sentiment Analysis","Twitter API"],         url:"https://github.com/Mihir2811/Social-PiggyBacking",                       desc:"Detects opportunistic brand mentions and bandwagon behaviour in social media via fine-tuned sentiment classifiers." },
+  { id:"traffic-mgmt",    name:"Traffic Management System",          cat:"Tools / CV / Other", stack:["Python","Computer Vision","Edge AI"],             url:"https://traffic-management.example.com/",                                 desc:"Edge-AI traffic monitoring with dynamic signal control — processes live CCTV feeds to optimise junction throughput in real time." },
+  { id:"vision-grey",     name:"Vision Grey",                        cat:"Tools / CV / Other", stack:["Computer Vision","Drone","Depth Estimation"],     url:"https://vision-grey.example.com/",                                        desc:"Low-light obstacle detection for drones using adaptive histogram equalization and monocular depth estimation." },
+  { id:"md2pdf",          name:"Markdown2PDF",                       cat:"Tools / CV / Other", stack:["Python","Pandoc","LaTeX","CLI"],                  url:"https://github.com/user/markdown2pdf",                                    desc:"CLI tool that converts Markdown documents to beautifully typeset PDFs via Pandoc and custom LaTeX templates." },
+  { id:"cc-due",          name:"Credit Card Due Finder",             cat:"Tools / CV / Other", stack:["Rust","OCR","PDF Processing"],                    url:"https://github.com/user/cc-due-finder",                                   desc:"Extracts and aggregates due amounts from scanned credit-card statements using Rust and Tesseract OCR." },
+  { id:"json2yaml",       name:"JSON2YAML",                          cat:"Tools / CV / Other", stack:["Go","CLI","DevTools"],                            url:"https://github.com/user/json-to-yaml",                                    desc:"Blazing-fast CLI for bidirectional JSON ↔ YAML conversion with comment preservation and schema validation." },
+  { id:"pdf2png",         name:"PDF2PNG",                            cat:"Tools / CV / Other", stack:["Python","Image Processing","CLI"],                url:"https://github.com/user/pdf-to-png",                                      desc:"Batch-converts PDF pages to high-resolution PNG images with configurable DPI, cropping, and colour-space options." },
+  { id:"web-rag",         name:"Web-Based RAG Chatbot",              cat:"Tools / CV / Other", stack:["Next.js","LLM","RAG"],                           url:"https://github.com/user/web-rag-chatbot",                                 desc:"Browser-side retrieval-augmented chatbot that answers questions over user-uploaded local documents with no backend server required." },
+];
+
+/* ── Sidebar ── */
+function buildSidebar() {
+  const body = document.getElementById('sidebar-body');
+  let curCat = '';
+  PROJECTS.forEach((p, i) => {
+    if (p.cat !== curCat) {
+      curCat = p.cat;
+      const lbl = document.createElement('span');
+      lbl.className = 'sidebar-cat-label';
+      lbl.textContent = p.cat;
+      body.appendChild(lbl);
+    }
+    const a = document.createElement('a');
+    a.href = `#page-${p.id}`;
+    a.className = 'sidebar-link';
+    a.dataset.id = p.id;
+    a.textContent = `${String(i+1).padStart(2,'0')}. ${p.name}`;
+    body.appendChild(a);
+  });
+}
+
+/* ── TOC ── */
+function buildTOC() {
+  const tbl = document.getElementById('toc-table');
+  let curCat = '';
+  PROJECTS.forEach((p, i) => {
+    if (p.cat !== curCat) {
+      curCat = p.cat;
+      const tr = tbl.insertRow();
+      const td = tr.insertCell(); td.colSpan = 3;
+      td.className = 'toc-cat'; td.textContent = p.cat;
+    }
+    const tr = tbl.insertRow();
+    const n  = tr.insertCell(); n.textContent = String(i+1).padStart(2,'0');
+    n.style.cssText = 'width:28px;color:var(--muted);font-size:.82rem;';
+    const nm = tr.insertCell();
+    const a = document.createElement('a'); a.href=`#page-${p.id}`; a.className='doc-link';
+    a.textContent = p.name; nm.appendChild(a);
+    const pg = tr.insertCell(); pg.textContent = `pg. ${i+2}`;
+    pg.style.cssText = 'text-align:right;color:var(--muted);font-size:.8rem;white-space:nowrap;';
+  });
+}
+
+/* ── Project pages ── */
+function buildPages() {
+  const container = document.getElementById('pages');
+  PROJECTS.forEach((p, i) => {
+    const catGroup = PROJECTS.filter(q => q.cat === p.cat);
+    const catPos   = catGroup.indexOf(p) + 1;
+    const prev     = PROJECTS[i-1];
+    const next     = PROJECTS[i+1];
+
+    const sec = document.createElement('section');
+    sec.id = `page-${p.id}`;
+    sec.className = 'doc-page';
+
+    sec.innerHTML = `
+      <div class="paper">
+
+        <!-- Header row -->
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+          <span style="font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">
+            ${p.cat} &nbsp;·&nbsp; ${catPos} of ${catGroup.length}
+          </span>
+          <span style="font-size:.7rem;color:var(--muted);">Project ${i+1} / 22</span>
+        </div>
+
+        <!-- Double rule -->
+        <div class="rule-double"></div>
+        <hr class="rule-single" style="margin-bottom:26px;">
+
+        <!-- Title row with watermark number -->
+        <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:8px;">
+          <span class="wm-num">${String(i+1).padStart(2,'0')}</span>
+          <div style="flex:1;min-width:0;">
+            <h2 style="font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:bold;line-height:1.2;margin-bottom:10px;">
+              ${p.name}
+            </h2>
+            <span style="font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;
+                         border:1px solid var(--muted);padding:1px 8px;border-radius:2px;
+                         color:var(--muted);display:inline-block;margin-bottom:4px;">
+              ${p.cat}
+            </span>
+          </div>
+        </div>
+
+        <hr class="rule-single" style="margin-bottom:28px;">
+
+        <!-- Info table -->
+        <table class="info-table" style="margin-bottom:32px;">
+          <tr>
+            <td class="label">Project Name</td>
+            <td class="val">${p.name}</td>
+          </tr>
+          <tr>
+            <td class="label">Tech Stack</td>
+            <td class="val">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:2px;">
+                ${p.stack.map(s=>`<span class="tag">${s}</span>`).join('')}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">View Code</td>
+            <td class="val">
+              ${p.url === '#'
+                ? `<em style="color:var(--muted);">Private / Coming Soon</em>`
+                : `<a href="${p.url}" target="_blank" class="doc-link" style="word-break:break-all;">${p.url}</a>`
+              }
+            </td>
+          </tr>
+        </table>
+
+        <!-- Description -->
+        <div style="flex:1;">
+          <p style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">
+            Description
+          </p>
+          <hr class="rule-single" style="margin-bottom:16px;">
+          <p style="font-size:1.02rem;line-height:1.9;max-width:580px;">
+            ${p.desc}
+          </p>
+        </div>
+
+        <!-- Prev / Next -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:14px;border-top:1px dotted var(--border-light);">
+          ${prev
+            ? `<a href="#page-${prev.id}" class="doc-link" style="font-size:.82rem;">&#8592; ${prev.name}</a>`
+            : `<span></span>`}
+          ${next
+            ? `<a href="#page-${next.id}" class="doc-link" style="font-size:.82rem;">${next.name} &#8594;</a>`
+            : `<span style="font-size:.82rem;color:var(--muted);">End of Portfolio</span>`}
+        </div>
+
+        <!-- Page footer -->
+        <p class="page-footer" style="margin-top:18px;">
+          Mihir &nbsp;·&nbsp; Project Portfolio &nbsp;·&nbsp; Page ${i+2}
+        </p>
+
+      </div>
+    `;
+    container.appendChild(sec);
+  });
+}
+
+/* ── Scroll spy ── */
+function initScrollSpy() {
+  const links = document.querySelectorAll('#sidebar-body .sidebar-link');
+  const pages = document.querySelectorAll('section[id^="page-"]');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const id = e.target.id.replace('page-','');
+        const lnk = document.querySelector(`#sidebar-body [data-id="${id}"]`);
+        if (lnk) {
+          lnk.classList.add('active');
+          lnk.scrollIntoView({ block:'nearest' });
+        }
+      }
+    });
+  }, { threshold: 0.45 });
+  pages.forEach(p => io.observe(p));
+}
+
+/* ── Dark mode ── */
+function toggleDark() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  updateIcons(isDark);
+}
+function updateIcons(isDark) {
+  document.querySelector('.dark-hidden').style.display = isDark ? 'none' : 'block';
+  document.querySelector('.light-hidden').style.display = isDark ? 'block' : 'none';
+}
+(function(){
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const isDark = saved === 'dark' || (!saved && prefersDark);
+  if (isDark) document.documentElement.classList.add('dark');
+  updateIcons(isDark);
+})();
+
+/* ── Mobile sidebar ── */
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+});
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+document.getElementById('sidebar').addEventListener('click', e => {
+  if (e.target.closest('a') && window.innerWidth < 768) closeSidebar();
+});
+
+/* ── Back to top ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('show', window.scrollY > 300);
+});
+
+/* ── Init ── */
+buildSidebar();
+buildTOC();
+buildPages();
+initScrollSpy();
+</script>
+</body>
+</html>
